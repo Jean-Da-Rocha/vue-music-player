@@ -64,7 +64,7 @@
     </v-row>
     <v-row class="mt-3">
       <v-col xl="4" lg="6" md="8" sm="10" class="mr-auto ml-auto">
-        <v-slider v-model="media" dark color="grey">
+        <v-slider dark color="grey">
           <v-icon slot="prepend" color="primary">mdi-volume-low</v-icon>
           <v-icon slot="append" color="primary">mdi-volume-high</v-icon>
         </v-slider>

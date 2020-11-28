@@ -1,14 +1,22 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Player from '../views/Player.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Player',
-    component: Player,
+    redirect: '/playlist',
+  },
+  {
+    path: '/playlist',
+    name: 'playlist',
+    component: () => import('../views/Playlist.vue'),
+  },
+  {
+    path: '/track',
+    name: 'player',
+    component: () => import('../views/Player.vue'),
   },
 ];
 
