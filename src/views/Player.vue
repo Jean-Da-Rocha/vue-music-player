@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col class="text-left">
-        <v-btn class="mx-2" fab color="primary" dark>
+        <v-btn class="mx-2" fab color="primary" dark outlined small>
           <v-icon>
             mdi-arrow-left
           </v-icon>
@@ -10,7 +10,7 @@
       </v-col>
       <div style="margin-top: 7rem"></div>
       <v-col class="text-right">
-        <v-btn class="mx-2" fab color="primary" dark>
+        <v-btn class="mx-2" fab color="primary" dark small>
           <v-icon>
             mdi-heart-outline
           </v-icon>
@@ -46,31 +46,28 @@
       </v-col>
       <v-col cols="12" class="text-center">
         <v-btn class="mx-2" fab dark color="primary" outlined small>
-          <v-icon dark>mdi-skip-previous</v-icon>
+          <v-icon dark>mdi-shuffle-variant</v-icon>
         </v-btn>
         <v-btn class="mx-2" fab dark color="primary" outlined small>
-          <v-icon dark>mdi-stop</v-icon>
+          <v-icon dark>mdi-skip-previous</v-icon>
         </v-btn>
         <v-btn class="mx-2" fab dark color="primary">
           <v-icon dark>mdi-play</v-icon>
         </v-btn>
         <v-btn class="mx-2" fab dark color="primary" outlined small>
-          <v-icon dark>mdi-pause</v-icon>
+          <v-icon dark>mdi-skip-next</v-icon>
         </v-btn>
         <v-btn class="mx-2" fab dark color="primary" outlined small>
-          <v-icon dark>mdi-skip-next</v-icon>
+          <v-icon dark>mdi-repeat-once</v-icon>
         </v-btn>
       </v-col>
     </v-row>
     <v-row class="mt-3">
       <v-col xl="4" lg="6" md="8" sm="10" class="mr-auto ml-auto">
-        <v-slider
-          v-model="media"
-          prepend-icon="mdi-volume-low"
-          append-icon="mdi-volume-high"
-          dark
-          color="grey"
-        ></v-slider>
+        <v-slider v-model="media" dark color="grey">
+          <v-icon slot="prepend" color="primary">mdi-volume-low</v-icon>
+          <v-icon slot="append" color="primary">mdi-volume-high</v-icon>
+        </v-slider>
       </v-col>
     </v-row>
   </v-container>
