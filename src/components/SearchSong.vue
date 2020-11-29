@@ -6,10 +6,10 @@
       dark
       color="primary"
       clearable
-      @click:clear="resetSearchField()"
       rounded
       solo
       v-model="searchQuery"
+      @click:clear="resetSearchField()"
       @keydown="searchSongs()"
     >
       <v-icon slot="append" color="primary">mdi-magnify</v-icon>
@@ -32,12 +32,18 @@ export default {
         this.searchQuery = this.searchQuery.toLowerCase();
 
         this.songs.map(song => {
-          song.displayable = this.hasMatches(song.artist, song.title, song.description);
+          song.displayable = this.hasMatches(
+            song.artist,
+            song.title,
+            song.description
+          );
         });
       }
     },
     hasMatches(...attributes) {
-      return attributes.some(attribute => attribute.toLowerCase().includes(this.searchQuery));
+      return attributes.some(attribute =>
+        attribute.toLowerCase().includes(this.searchQuery)
+      );
     },
     resetSearchField() {
       this.displayAllSongs();

@@ -2,7 +2,15 @@
   <v-container>
     <v-row>
       <v-col class="text-left">
-        <v-btn class="mx-2" fab color="primary" dark outlined small>
+        <v-btn
+          class="mx-2"
+          fab
+          color="primary"
+          dark
+          outlined
+          small
+          @click="redirectTo('playlist')"
+        >
           <v-icon>
             mdi-arrow-left
           </v-icon>
@@ -20,7 +28,7 @@
     <v-row>
       <v-col class="d-flex justify-center" cols="12">
         <v-img
-          src="https://media.senscritique.com/media/000016786835/source_big/The_Time_Thief.jpg"
+          :src="require(`@/assets/${currentSong.coverImage}`)"
           class="rounded-circle"
           max-height="250"
           max-width="250"
@@ -29,9 +37,9 @@
       </v-col>
       <v-col cols="12" class="text-center mt-10">
         <p class="display-2 white--text" style="text-shadow: #FC0 1px 0 10px;">
-          2048
+          {{ currentSong.title }}
         </p>
-        <p class="overline grey--text">Redtenbacher's Funkestra</p>
+        <p class="overline grey--text">{{ currentSong.artist }}</p>
       </v-col>
       <v-col xl="4" lg="6" md="8" sm="10" class="mr-auto ml-auto">
         <v-progress-linear value="15" height="6"></v-progress-linear>
@@ -74,8 +82,23 @@
 </template>
 
 <script>
+import songs from '../data/playlist';
+
 export default {
-  name: 'Player',
-  components: {},
+  name: 'PlaySong',
+  data() {
+    return {
+      songs,
+      currentSong: [],
+    };
+  },
+  methods: {
+      redirectTo(routeName) {
+          this.$router.push({ name: routeName});
+      }
+  },
+  created() {
+    this.currentSong = songs.find(song => song.id === this.$route.params.id);
+  },
 };
 </script>

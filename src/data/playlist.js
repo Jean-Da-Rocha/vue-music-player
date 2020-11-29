@@ -1,5 +1,6 @@
 export default [
   {
+    id: '5f180bca383c08046480682c',
     title: 'Why We Lose',
     track: '@/playlist/cartoon_why_we_lose.mp3',
     artist: 'Cartoon',
@@ -12,6 +13,7 @@ export default [
     displayable: true,
   },
   {
+    id: '5f1862ae97d9047915105f2f',
     title: 'Disowned',
     track: '@/playlist/inova_disowned.mp3',
     artist: 'Inova',
@@ -24,6 +26,7 @@ export default [
     displayable: true,
   },
   {
+    id: '5f1862e197d9047915105f30',
     title: 'Isolation',
     track: '@/playlist/inova_isolation.mp3',
     artist: 'Inova',
@@ -36,6 +39,7 @@ export default [
     displayable: true,
   },
   {
+    id: '5f1862e197d9047915105f31',
     title: 'The Apocalypse',
     track: '@/playlist/niviro_the_apocalypse.mp3',
     artist: 'Niviro',
@@ -48,6 +52,7 @@ export default [
     displayable: true,
   },
   {
+    id: '5f1862e197d9047915105f32',
     title: 'The Guardian Angels',
     track: '@/playlist/niviro_the_guardian_angels.mp3',
     artist: 'Niviro',
