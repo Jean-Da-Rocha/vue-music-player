@@ -7,44 +7,77 @@
     </v-app-bar>
 
     <v-container>
-      <v-row dense>
-        <v-col cols="12">
+      <v-row>
+        <v-col cols="12" lg="12" class="mt-5">
+          <v-text-field
+            label="Rechercher"
+            outlined
+            dark
+            color="primary"
+            clearable
+            rounded
+            solo
+          >
+            <v-icon slot="append" color="primary">mdi-magnify</v-icon>
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" class="mt-n8">
           <v-card
             dark
             shaped
             v-for="(song, index) in songs"
             :key="index"
-            class="my-5"
+            class="my-5 pa-3"
           >
-            <div class="d-flex flex-no-wrap justify-space-between">
+            <div>
+              <div class="d-flex justify-space-between">
+                <div>
+                  <v-card-title class="overline">{{ song.title }}</v-card-title>
+                  <v-card-subtitle>
+                    Artiste - {{ song.artist }}
+                    <br />
+                    {{ song.genre }}
+                  </v-card-subtitle>
+                </div>
+                <v-avatar
+                  class="ma-3"
+                  size="100"
+                  color="primary"
+                  style="filter: drop-shadow(0 0 2mm #ee44aa);"
+                >
+                  <v-img
+                    class="rounded-circle"
+                    :src="require(`@/assets/${song.coverImage}`)"
+                  ></v-img>
+                </v-avatar>
+              </div>
               <div>
-                <v-card-title>{{ song.title }}</v-card-title>
-                <v-card-subtitle>
-                  Artiste - {{ song.artist }}
-                  <br />
-                  Genre - {{ song.genre }}
-                </v-card-subtitle>
                 <v-card-text>
                   {{ song.description }}
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn class="ml-2 mt-5" outlined rounded small>
-                    Écouter
-                  </v-btn>
+                  <div
+                    class="d-flex justify-space-between"
+                    style="width: 100%;"
+                  >
+                    <div>
+                      <v-btn class="mx-2" fab dark color="primary" small>
+                        <v-icon dark>mdi-play</v-icon>
+                      </v-btn>
+                    </div>
+                    <div>
+                      <v-btn class="mx-2" fab dark color="primary" small>
+                        <v-icon dark>mdi-playlist-plus</v-icon>
+                      </v-btn>
+                      <v-btn class="mx-2" fab color="primary" dark small>
+                        <v-icon>
+                          mdi-heart-outline
+                        </v-icon>
+                      </v-btn>
+                    </div>
+                  </div>
                 </v-card-actions>
               </div>
-
-              <v-avatar
-                class="ma-3"
-                size="100"
-                color="primary"
-                style="filter: drop-shadow(0 0 2mm #ee44aa);"
-              >
-                <v-img
-                  class="rounded-circle"
-                  :src="require(`@/assets/${song.coverImage}`)"
-                ></v-img>
-              </v-avatar>
             </div>
           </v-card>
         </v-col>
@@ -65,3 +98,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-text-field--outlined >>> fieldset {
+  border-color: #ee44aa;
+}
+</style>
