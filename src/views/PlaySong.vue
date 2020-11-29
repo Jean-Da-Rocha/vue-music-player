@@ -45,10 +45,10 @@
         <v-progress-linear value="15" height="6"></v-progress-linear>
         <div class="d-flex justify-space-between mt-2">
           <p class="grey--text">
-            0:31
+            {{ currentPlayerTime | minutes }}
           </p>
           <p class="grey--text">
-            {{ currentSong.howl.duration() }}
+            {{ currentSong.howl.duration() | minutes }}
           </p>
         </div>
       </v-col>
@@ -56,15 +56,37 @@
         <v-btn class="mx-2" fab dark color="primary" outlined small>
           <v-icon dark>mdi-shuffle-variant</v-icon>
         </v-btn>
-        <v-btn class="mx-2" fab dark color="primary" outlined small>
+        <v-btn
+          class="mx-2"
+          fab
+          dark
+          color="primary"
+          outlined
+          small
+          @click="previousSong()"
+        >
           <v-icon dark>mdi-skip-previous</v-icon>
         </v-btn>
-        <v-btn class="mx-2" fab dark color="primary" @click="togglePlay()">
+        <v-btn
+          class="mx-2"
+          fab
+          dark
+          color="primary"
+          @click="toggleSongPlaying()"
+        >
           <v-icon dark>
             {{ this.currentSong.howl.playing() ? 'mdi-pause' : 'mdi-play' }}
           </v-icon>
         </v-btn>
-        <v-btn class="mx-2" fab dark color="primary" outlined small>
+        <v-btn
+          class="mx-2"
+          fab
+          dark
+          color="primary"
+          outlined
+          small
+          @click="nextSong()"
+        >
           <v-icon dark>mdi-skip-next</v-icon>
         </v-btn>
         <v-btn class="mx-2" fab dark color="primary" outlined small>
@@ -84,15 +106,17 @@
 </template>
 
 <script>
-import songs from '../data/playlist';
+import songsList from '../data/playlist';
 import { Howl } from 'howler';
 
 export default {
   name: 'PlaySong',
   data() {
     return {
-      songs,
+      songsList,
       currentSong: [],
+      currentIndex: 0,
+      currentPlayerTime: 0,
       togglePlayIcon: 'mdi-play',
     };
   },
@@ -100,21 +124,73 @@ export default {
     redirectTo(routeName) {
       this.$router.push({ name: routeName });
     },
-    togglePlay() {
-      this.currentSong.howl.playing()
-        ? this.currentSong.howl.pause()
-        : this.currentSong.howl.play();
+    toggleSongPlaying() {
+      this.currentSong.howl.playing() ? this.pause() : this.play();
+    },
+    play() {
+      this.currentSong.howl.play();
+    },
+    pause() {
+      this.currentSong.howl.pause();
+    },
+    stop() {
+      this.currentSong.howl.stop();
+    },
+    previousSong() {
+      this.currentIndex -= 1;
+
+      if (this.currentIndex < 0) {
+        this.currentIndex = this.songsList.length - 1;
+      }
+
+      this.getPreviousSongRoute();
+    },
+    nextSong() {
+      this.currentIndex += 1;
+
+      if (this.currentIndex >= this.songsList.length) {
+        this.currentIndex = 0;
+      }
+
+      this.getNextSongRoute();
+    },
+    getPreviousSongRoute() {
+      this.stop();
+
+      this.currentSong = songsList[this.currentIndex];
+
+      this.$router.push({
+        name: 'play-song',
+        params: { id: this.currentSong.id },
+      });
+
+      this.howlerize();
+    },
+    getNextSongRoute() {
+      this.getPreviousSongRoute();
+    },
+    howlerize() {
+      return (this.currentSong.howl = new Howl({
+        src: require(`../../playlist/${this.currentSong.file}`),
+        autoplay: true,
+      }));
     },
   },
   created() {
-    this.currentSong = songs.find(song => song.id === this.$route.params.id);
+    this.currentSong = songsList.find(
+      song => song.id === this.$route.params.id
+    );
 
-    this.currentSong.howl = new Howl({
-      src: require(`../../playlist/${this.currentSong.file}`),
-      autoplay: false,
-    });
+    // TODO: refactor.
+    this.currentIndex = songsList.findIndex(
+      song => song.id === this.$route.params.id
+    );
 
-    console.log(this.currentSong.howl);
+    this.howlerize();
+
+    setInterval(() => {
+      this.currentPlayerTime = this.currentSong.howl.seek();
+    }, 200);
   },
 };
 </script>
