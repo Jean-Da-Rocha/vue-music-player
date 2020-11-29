@@ -9,6 +9,7 @@ export default [
     description: `Titre sorti en 2015 en collaboration avec l'artiste Colemann Trapp,
       disponible sur Spotify, Youtube Music et Deezer`,
     bookmarked: false,
+    displayable: true,
   },
   {
     title: 'Disowned',
@@ -20,6 +21,7 @@ export default [
     description: `Titre sorti en 2017, disponible sur Spotify, Youtube Music et Deezer.
       Ce morceau a connu son pic de popularité grâce à une vidéo montage concernant un joueur du MOBA League of Legends (ParnStarZilean)`,
     bookmarked: false,
+    displayable: true,
   },
   {
     title: 'Isolation',
@@ -31,6 +33,7 @@ export default [
     description: `Titre sorti en 2018, disponible sur Spotify et YouTube Music uniquement.
     Ce morceau est un des plus populaires de cet artiste avec plus de 10 millions d'écoutes.`,
     bookmarked: false,
+    displayable: true,
   },
   {
     title: 'The Apocalypse',
@@ -42,6 +45,7 @@ export default [
     description: `Titre sorti en 2018, disponible sur Spotify, YouTube Music et Deezer.
     Ce morceau passe souvent sur la chaîne Twitch du streamer League Of Legends RAT IRL.`,
     bookmarked: false,
+    displayable: true,
   },
   {
     title: 'The Guardian Angels',
@@ -53,5 +57,6 @@ export default [
     description: `Titre sorti en 2017, disponible sur Spotify, YouTube Music et Deezer.
     Il s'agit du deuxième morceau le plus écouté de l'artiste avec plus de 6,5 millions d'écoutes.`,
     bookmarked: false,
+    displayable: true,
   },
 ];
