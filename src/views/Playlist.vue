@@ -8,7 +8,7 @@
 
     <v-container>
       <v-row>
-        <v-col cols="12" lg="12" class="mt-5">
+        <v-col cols="9" lg="10" class="mt-5">
           <v-text-field
             label="Rechercher"
             outlined
@@ -21,14 +21,58 @@
             <v-icon slot="append" color="primary">mdi-magnify</v-icon>
           </v-text-field>
         </v-col>
-        <v-col cols="12" class="mt-n8">
-          <v-card
-            dark
-            shaped
-            v-for="(song, index) in songs"
-            :key="index"
-            class="my-5 pa-3"
-          >
+        <v-col cols="3" lg="2" class="d-flex align-center mb-3">
+          <v-dialog v-model="dialog" dark>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="mx-2"
+                fab
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon dark>mdi-playlist-star</v-icon>
+              </v-btn>
+            </template>
+            <v-card color="#24293d">
+              <v-card-title class="headline mb-6">
+                Liste de morceaux favoris
+              </v-card-title>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title>Single-line item</v-list-item-title>
+                    <v-divider class="my-3"></v-divider>
+                    <v-list-item-title>Single-line item</v-list-item-title>
+                    <v-divider class="my-3"></v-divider>
+                    <v-list-item-title>Single-line item</v-list-item-title>
+                    <v-divider class="my-3"></v-divider>
+                    <v-list-item-title>Single-line item</v-list-item-title>
+                    <v-divider class="my-3"></v-divider>
+                  </v-list-item-content>
+                </v-list-item>
+              <v-card-text>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" text @click="dialog = false">
+                  Fermer
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col
+          lg="4"
+          md="12"
+          sm="12"
+          class="mt-n8 my-10"
+          v-for="(song, index) in songs"
+          :key="index"
+        >
+          <v-card dark shaped class="pa-3" height="100%">
             <div>
               <div class="d-flex justify-space-between">
                 <div>
@@ -94,6 +138,7 @@ export default {
   data() {
     return {
       songs,
+      dialog: false,
     };
   },
 };
