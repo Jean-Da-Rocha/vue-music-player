@@ -30,8 +30,8 @@
         <v-img
           :src="require(`@/assets/${currentSong.coverImage}`)"
           class="rounded-circle"
-          max-height="250"
-          max-width="250"
+          max-height="225"
+          max-width="225"
           style="filter: drop-shadow(0 2mm 15mm #ee44aa);"
         ></v-img>
       </v-col>
@@ -48,7 +48,7 @@
             0:31
           </p>
           <p class="grey--text">
-            4:58
+            {{ currentSong.howl.duration() }}
           </p>
         </div>
       </v-col>
@@ -59,8 +59,10 @@
         <v-btn class="mx-2" fab dark color="primary" outlined small>
           <v-icon dark>mdi-skip-previous</v-icon>
         </v-btn>
-        <v-btn class="mx-2" fab dark color="primary">
-          <v-icon dark>mdi-play</v-icon>
+        <v-btn class="mx-2" fab dark color="primary" @click="togglePlay()">
+          <v-icon dark>
+            {{ this.currentSong.howl.playing() ? 'mdi-pause' : 'mdi-play' }}
+          </v-icon>
         </v-btn>
         <v-btn class="mx-2" fab dark color="primary" outlined small>
           <v-icon dark>mdi-skip-next</v-icon>
@@ -83,6 +85,7 @@
 
 <script>
 import songs from '../data/playlist';
+import { Howl } from 'howler';
 
 export default {
   name: 'PlaySong',
@@ -90,15 +93,28 @@ export default {
     return {
       songs,
       currentSong: [],
+      togglePlayIcon: 'mdi-play',
     };
   },
   methods: {
-      redirectTo(routeName) {
-          this.$router.push({ name: routeName});
-      }
+    redirectTo(routeName) {
+      this.$router.push({ name: routeName });
+    },
+    togglePlay() {
+      this.currentSong.howl.playing()
+        ? this.currentSong.howl.pause()
+        : this.currentSong.howl.play();
+    },
   },
   created() {
     this.currentSong = songs.find(song => song.id === this.$route.params.id);
+
+    this.currentSong.howl = new Howl({
+      src: require(`../../playlist/${this.currentSong.file}`),
+      autoplay: false,
+    });
+
+    console.log(this.currentSong.howl);
   },
 };
 </script>

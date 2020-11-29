@@ -19,6 +19,7 @@
 
 <script>
 import songs from '../data/playlist';
+
 import BookmarkedSongsDialog from '../components/BookmarkedSongsDialog';
 import SearchSong from '../components/SearchSong';
 import SongsList from '../components/SongsList';
