@@ -15,7 +15,9 @@
             <div>
               <v-card-title class="overline">{{ song.title }}</v-card-title>
               <v-card-subtitle>
-                Artiste - {{ song.artist }}
+                <span @click="seeArtistDescription(song.id)" style="color: #EE44AA;">
+                  Artiste - {{ song.artist }}
+                </span>
                 <br />
                 {{ song.genre }}
               </v-card-subtitle>
@@ -117,11 +119,17 @@ export default {
       if (!this.priorityQueue.includes(songId)) {
         this.priorityQueue.push(songId);
       } else {
-          this.priorityQueue.splice(this.getQueueIndex(songId), 1);
+        this.priorityQueue.splice(this.getQueueIndex(songId), 1);
       }
     },
     getQueueIndex(songId) {
       return this.priorityQueue.findIndex(el => el === songId);
+    },
+    seeArtistDescription(songId) {
+      this.$router.push({
+        name: 'artist',
+        params: { id: songId },
+      });
     },
   },
   props: {

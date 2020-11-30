@@ -18,6 +18,11 @@ const routes = [
     name: 'play-song',
     component: () => import('../views/PlaySong.vue'),
   },
+  {
+    path: '/artist/:id',
+    name: 'artist',
+    component: () => import('../views/Artist.vue'),
+  },
 ];
 
 const router = new VueRouter({
