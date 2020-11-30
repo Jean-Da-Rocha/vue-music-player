@@ -60,7 +60,7 @@
                     dark
                     color="primary"
                     small
-                    @click="addToQueue(song.id)"
+                    @click="toggleWaitingQueue(song.id)"
                   >
                     <v-icon dark>
                       {{
@@ -113,8 +113,7 @@ export default {
 
       this.playlist[index]['bookmarked'] = !isBookmarked;
     },
-    // TODO: rename to toggleWaitingQueue(songId) + change btn design.
-    addToQueue(songId) {
+    toggleWaitingQueue(songId) {
       if (!this.priorityQueue.includes(songId)) {
         this.priorityQueue.push(songId);
       } else {

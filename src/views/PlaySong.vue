@@ -189,16 +189,20 @@ export default {
     nextSong() {
       if (this.shuffle) {
         this.currentIndex = this.generateRandomIndex();
-      } else {
-        this.currentIndex += 1;
       }
 
       if (this.priorityQueue.length > 0) {
-        this.currentIndex = this.playlist.findIndex(
+        const priorityQueueIndex = this.playlist.findIndex(
           song => song.id === this.priorityQueue[0]
         );
 
+        priorityQueueIndex === this.currentIndex
+          ? (this.currentIndex += 1)
+          : (this.currentIndex = priorityQueueIndex);
+
         this.priorityQueue.shift();
+      } else {
+          this.currentIndex += 1;
       }
 
       if (this.currentIndex >= this.playlist.length) {
