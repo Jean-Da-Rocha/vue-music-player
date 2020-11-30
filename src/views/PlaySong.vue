@@ -186,6 +186,9 @@ export default {
     getNextSongRoute() {
       this.getPreviousSongRoute();
     },
+    getSongDuration() {
+      return this.currentSong.howl.duration();
+    },
     setVolume(songVolume) {
       Howler.volume(songVolume);
     },
@@ -216,12 +219,21 @@ export default {
     }, 200);
   },
   computed: {
-    getSongProgress() {
-      if (this.currentSong.howl.duration() === 0) {
-        return 0;
-      }
+    getSongProgress: {
+      get() {
+        if (this.getSongDuration() === 0) {
+          return 0;
+        }
 
-      return (this.currentPlayerTime / this.currentSong.howl.duration()) * 100;
+        return (this.currentPlayerTime / this.getSongDuration()) * 100;
+      },
+      set(value) {
+        if (this.currentSong.howl.playing()) {
+          return this.currentSong.howl.seek(
+            (this.getSongDuration() / 100) * value
+          );
+        }
+      },
     },
   },
 };
