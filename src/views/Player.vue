@@ -18,9 +18,16 @@
       </v-col>
       <div style="margin-top: 7rem"></div>
       <v-col class="text-right">
-        <v-btn class="mx-2" fab color="primary" dark small>
+        <v-btn
+          class="mx-2"
+          fab
+          color="primary"
+          dark
+          small
+          @click="toggleBookmark()"
+        >
           <v-icon>
-            mdi-heart-outline
+            {{ currentSong.bookmarked ? 'mdi-heart' : 'mdi-heart-outline' }}
           </v-icon>
         </v-btn>
       </v-col>
@@ -56,7 +63,15 @@
         </div>
       </v-col>
       <v-col cols="12" class="text-center">
-        <v-btn class="mx-2" fab dark color="primary" outlined small>
+        <v-btn
+          class="mx-2"
+          fab
+          dark
+          color="primary"
+          :outlined="!shuffle"
+          small
+          @click="toggleShuffle()"
+        >
           <v-icon dark>mdi-shuffle-variant</v-icon>
         </v-btn>
         <v-btn
@@ -92,7 +107,15 @@
         >
           <v-icon dark>mdi-skip-next</v-icon>
         </v-btn>
-        <v-btn class="mx-2" fab dark color="primary" outlined small>
+        <v-btn
+          class="mx-2"
+          fab
+          dark
+          color="primary"
+          :outlined="!loop"
+          small
+          @click="toggleLoop()"
+        >
           <v-icon dark>mdi-repeat-once</v-icon>
         </v-btn>
       </v-col>
@@ -120,17 +143,21 @@
 
 <script>
 import playlist from '../data/playlist';
+import priorityQueue from '../data/queue';
 import { Howl, Howler } from 'howler';
 
 export default {
-  name: 'PlaySong',
+  name: 'Player',
   data() {
     return {
       currentIndex: 0,
       currentPlayerTime: 0,
       currentSong: [],
       muted: false,
+      loop: false,
+      shuffle: false,
       playlist,
+      priorityQueue,
       oldVolumeValue: 0,
       songVolume: 0.5,
       songProgress: 0,
@@ -140,9 +167,6 @@ export default {
   methods: {
     redirectTo(routeName) {
       this.$router.push({ name: routeName });
-    },
-    toggleSongPlaying() {
-      this.currentSong.howl.playing() ? this.pause() : this.play();
     },
     play() {
       this.currentSong.howl.play();
@@ -163,7 +187,23 @@ export default {
       this.getPreviousSongRoute();
     },
     nextSong() {
-      this.currentIndex += 1;
+      if (this.shuffle) {
+        this.currentIndex = this.generateRandomIndex();
+      }
+
+      if (this.priorityQueue.length > 0) {
+        const priorityQueueIndex = this.playlist.findIndex(
+          song => song.id === this.priorityQueue[0]
+        );
+
+        priorityQueueIndex === this.currentIndex
+          ? (this.currentIndex += 1)
+          : (this.currentIndex = priorityQueueIndex);
+
+        this.priorityQueue.shift();
+      } else {
+          this.currentIndex += 1;
+      }
 
       if (this.currentIndex >= this.playlist.length) {
         this.currentIndex = 0;
@@ -171,13 +211,22 @@ export default {
 
       this.getNextSongRoute();
     },
+    generateRandomIndex() {
+      let randomIndex = Math.floor(Math.random() * this.playlist.length);
+
+      while (randomIndex === this.currentIndex) {
+        randomIndex = Math.floor(Math.random() * this.playlist.length);
+      }
+
+      return randomIndex;
+    },
     getPreviousSongRoute() {
       this.stop();
 
       this.currentSong = playlist[this.currentIndex];
 
       this.$router.push({
-        name: 'play-song',
+        name: 'player',
         params: { id: this.currentSong.id },
       });
 
@@ -197,11 +246,32 @@ export default {
 
       this.muted = !this.muted;
     },
+    toggleSongPlaying() {
+      this.currentSong.howl.playing() ? this.pause() : this.play();
+    },
+    toggleLoop() {
+      this.loop = !this.loop;
+    },
+    toggleShuffle() {
+      this.shuffle = !this.shuffle;
+    },
+    toggleBookmark() {
+      this.currentSong.bookmarked = !this.currentSong.bookmarked;
+    },
     howlerize() {
       return (this.currentSong.howl = new Howl({
         src: require(`../../playlist/${this.currentSong.file}`),
-        autoplay: false,
+        autoplay: true,
         volume: this.songVolume,
+        onend: () => {
+          if (this.loop) {
+            this.play();
+
+            this.loop = false;
+          } else {
+            this.nextSong();
+          }
+        },
       }));
     },
   },

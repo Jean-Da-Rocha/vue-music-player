@@ -15,7 +15,9 @@
             <div>
               <v-card-title class="overline">{{ song.title }}</v-card-title>
               <v-card-subtitle>
-                Artiste - {{ song.artist }}
+                <span @click="seeArtistDescription(song.id)" style="color: #EE44AA;">
+                  Artiste - {{ song.artist }}
+                </span>
                 <br />
                 {{ song.genre }}
               </v-card-subtitle>
@@ -37,7 +39,22 @@
               {{ song.description }}
             </v-card-text>
             <v-card-actions>
-              <div class="d-flex justify-space-between" style="width: 100%;">
+              <div
+                class="d-flex justify-space-between align-center"
+                style="width: 100%;"
+              >
+                <div>
+                  <v-btn
+                    class="mx-2"
+                    rounded
+                    dark
+                    color="primary"
+                    small
+                    @click="getSong(song.id, index)"
+                  >
+                    Écouter
+                  </v-btn>
+                </div>
                 <div>
                   <v-btn
                     class="mx-2"
@@ -45,18 +62,26 @@
                     dark
                     color="primary"
                     small
-                    @click="playSong(song.id, index)"
+                    @click="toggleWaitingQueue(song.id)"
                   >
-                    <v-icon dark>mdi-play</v-icon>
+                    <v-icon dark>
+                      {{
+                        priorityQueue.includes(song.id)
+                          ? 'mdi-playlist-minus'
+                          : 'mdi-playlist-plus'
+                      }}
+                    </v-icon>
                   </v-btn>
-                </div>
-                <div>
-                  <v-btn class="mx-2" fab dark color="primary" small>
-                    <v-icon dark>mdi-playlist-plus</v-icon>
-                  </v-btn>
-                  <v-btn class="mx-2" fab color="primary" dark small>
+                  <v-btn
+                    class="mx-2"
+                    fab
+                    color="primary"
+                    dark
+                    small
+                    @click="toggleBookmark(index)"
+                  >
                     <v-icon>
-                      mdi-heart-outline
+                      {{ song.bookmarked ? 'mdi-heart' : 'mdi-heart-outline' }}
                     </v-icon>
                   </v-btn>
                 </div>
@@ -70,17 +95,41 @@
 </template>
 
 <script>
+import priorityQueue from '../data/queue';
+
 export default {
   name: 'SongsList',
   data() {
     return {
       selectedSong: null,
+      priorityQueue,
     };
   },
   methods: {
-    playSong(id, index) {
+    getSong(id, index) {
       this.selectedSong = this.playlist[index];
-      this.$router.push({ name: 'play-song', params: { id } });
+      this.$router.push({ name: 'player', params: { id } });
+    },
+    toggleBookmark(index) {
+      const isBookmarked = this.playlist[index]['bookmarked'];
+
+      this.playlist[index]['bookmarked'] = !isBookmarked;
+    },
+    toggleWaitingQueue(songId) {
+      if (!this.priorityQueue.includes(songId)) {
+        this.priorityQueue.push(songId);
+      } else {
+        this.priorityQueue.splice(this.getQueueIndex(songId), 1);
+      }
+    },
+    getQueueIndex(songId) {
+      return this.priorityQueue.findIndex(el => el === songId);
+    },
+    seeArtistDescription(songId) {
+      this.$router.push({
+        name: 'artist',
+        params: { id: songId },
+      });
     },
   },
   props: {

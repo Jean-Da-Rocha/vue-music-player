@@ -8,7 +8,7 @@
     <v-container>
       <v-row>
         <SearchSong :playlist="playlist" />
-        <BookmarkedSongsDialog />
+        <BookmarkedSongsDialog :playlist="playlist" />
       </v-row>
       <v-row>
         <SongsList :playlist="playlist" />
