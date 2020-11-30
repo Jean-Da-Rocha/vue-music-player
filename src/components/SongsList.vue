@@ -108,7 +108,7 @@ export default {
   methods: {
     getSong(id, index) {
       this.selectedSong = this.playlist[index];
-      this.$router.push({ name: 'play-song', params: { id } });
+      this.$router.push({ name: 'player', params: { id } });
     },
     toggleBookmark(index) {
       const isBookmarked = this.playlist[index]['bookmarked'];

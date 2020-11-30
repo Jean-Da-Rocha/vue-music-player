@@ -147,7 +147,7 @@ import priorityQueue from '../data/queue';
 import { Howl, Howler } from 'howler';
 
 export default {
-  name: 'PlaySong',
+  name: 'Player',
   data() {
     return {
       currentIndex: 0,
@@ -226,7 +226,7 @@ export default {
       this.currentSong = playlist[this.currentIndex];
 
       this.$router.push({
-        name: 'play-song',
+        name: 'player',
         params: { id: this.currentSong.id },
       });
 
@@ -261,7 +261,7 @@ export default {
     howlerize() {
       return (this.currentSong.howl = new Howl({
         src: require(`../../playlist/${this.currentSong.file}`),
-        autoplay: false,
+        autoplay: true,
         volume: this.songVolume,
         onend: () => {
           if (this.loop) {
