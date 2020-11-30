@@ -34,11 +34,5 @@ module.exports = {
       maskIcon: '.img/icons/safari-pinned-tab.svg',
       msTileImage: '.img/icons/mstile-150x150.png',
     },
-    workboxPluginMode: 'InjectManifest',
-    workboxOptions: {
-      // skipWaiting: true,
-      swSrc: 'src/service-worker.js',
-      exclude: [/.map$/],
-    },
   },
 };
