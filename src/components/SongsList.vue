@@ -61,9 +61,14 @@
                     color="primary"
                     small
                     @click="addToQueue(song.id)"
-                    :disabled="priorityQueue.includes(song.id)"
                   >
-                    <v-icon dark>mdi-playlist-plus</v-icon>
+                    <v-icon dark>
+                      {{
+                        priorityQueue.includes(song.id)
+                          ? 'mdi-playlist-minus'
+                          : 'mdi-playlist-plus'
+                      }}
+                    </v-icon>
                   </v-btn>
                   <v-btn
                     class="mx-2"
@@ -108,8 +113,16 @@ export default {
 
       this.playlist[index]['bookmarked'] = !isBookmarked;
     },
+    // TODO: rename to toggleWaitingQueue(songId) + change btn design.
     addToQueue(songId) {
-      this.priorityQueue.push(songId);
+      if (!this.priorityQueue.includes(songId)) {
+        this.priorityQueue.push(songId);
+      } else {
+          this.priorityQueue.splice(this.getQueueIndex(songId), 1);
+      }
+    },
+    getQueueIndex(songId) {
+      return this.priorityQueue.findIndex(el => el === songId);
     },
   },
   props: {

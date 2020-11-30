@@ -13,14 +13,6 @@
       <v-row>
         <SongsList :playlist="playlist" />
       </v-row>
-      <p class="primary--text" style="position: fixed; bottom: 0">
-        <marquee>
-          <b>
-            Je suis une balise <i>marquee</i> obsolète mais sinon, le prochain morceau dans la liste
-            d'attente est : mon morceau 😁
-          </b>
-        </marquee>
-      </p>
     </v-container>
   </div>
 </template>
