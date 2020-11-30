@@ -37,8 +37,8 @@
         <v-img
           :src="require(`@/assets/${currentSong.coverImage}`)"
           class="rounded-circle"
-          max-height="225"
-          max-width="225"
+          max-height="175"
+          max-width="175"
           style="filter: drop-shadow(0 2mm 15mm #ee44aa);"
         ></v-img>
       </v-col>
