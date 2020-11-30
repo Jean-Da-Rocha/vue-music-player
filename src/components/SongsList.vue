@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="d-flex flex-wrap">
     <v-col
       lg="4"
       md="12"
       sm="12"
       class="mt-n8 my-10"
-      v-for="(song, index) in songs"
+      v-for="(song, index) in playlist"
       :key="index"
       v-show="song.displayable"
     >
@@ -45,7 +45,7 @@
                     dark
                     color="primary"
                     small
-                    @click="playSong(song.id)"
+                    @click="playSong(song.id, index)"
                   >
                     <v-icon dark>mdi-play</v-icon>
                   </v-btn>
@@ -72,13 +72,19 @@
 <script>
 export default {
   name: 'SongsList',
-  props: {
-    songs: Array,
+  data() {
+    return {
+      selectedSong: null,
+    };
   },
   methods: {
-    playSong(id) {
+    playSong(id, index) {
+      this.selectedSong = this.playlist[index];
       this.$router.push({ name: 'play-song', params: { id } });
     },
+  },
+  props: {
+    playlist: Array,
   },
 };
 </script>

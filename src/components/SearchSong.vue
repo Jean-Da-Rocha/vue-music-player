@@ -31,7 +31,7 @@ export default {
       if (this.searchQuery) {
         this.searchQuery = this.searchQuery.toLowerCase();
 
-        this.songs.map(song => {
+        this.playlist.map(song => {
           song.displayable = this.hasMatches(
             song.artist,
             song.title,
@@ -49,13 +49,13 @@ export default {
       this.displayAllSongs();
     },
     displayAllSongs() {
-      this.songs.map(song => {
+      this.playlist.map(song => {
         song.displayable = true;
       });
     },
   },
   props: {
-    songs: Array,
+    playlist: Array,
   },
 };
 </script>

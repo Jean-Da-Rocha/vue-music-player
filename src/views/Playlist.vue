@@ -7,18 +7,18 @@
     </v-app-bar>
     <v-container>
       <v-row>
-        <SearchSong :songs="songs" />
+        <SearchSong :playlist="playlist" />
         <BookmarkedSongsDialog />
       </v-row>
       <v-row>
-        <SongsList :songs="songs" />
+        <SongsList :playlist="playlist" />
       </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
-import songs from '../data/playlist';
+import playlist from '../data/playlist';
 import BookmarkedSongsDialog from '../components/BookmarkedSongsDialog';
 import SearchSong from '../components/SearchSong';
 import SongsList from '../components/SongsList';
@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      songs,
+      playlist,
     };
   },
 };

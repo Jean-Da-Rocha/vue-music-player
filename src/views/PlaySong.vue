@@ -42,7 +42,10 @@
         <p class="overline grey--text">{{ currentSong.artist }}</p>
       </v-col>
       <v-col xl="4" lg="6" md="8" sm="10" class="mr-auto ml-auto">
-        <v-progress-linear value="15" height="6"></v-progress-linear>
+        <v-progress-linear
+          v-model="getSongProgress"
+          height="6"
+        ></v-progress-linear>
         <div class="d-flex justify-space-between mt-2">
           <p class="grey--text">
             {{ currentPlayerTime | minutes }}
@@ -96,8 +99,18 @@
     </v-row>
     <v-row class="mt-3">
       <v-col xl="4" lg="6" md="8" sm="10" class="mr-auto ml-auto">
-        <v-slider dark color="grey">
-          <v-icon slot="prepend" color="primary">mdi-volume-low</v-icon>
+        <v-slider
+          dark
+          color="grey"
+          v-model="songVolume"
+          max="1"
+          step="0.01"
+          @change="setVolume(songVolume)"
+          style="touch-action: none;"
+        >
+          <v-icon slot="prepend" color="primary" @click="toggleVolumeMuted()">
+            {{ muted ? 'mdi-volume-off' : 'mdi-volume-low' }}
+          </v-icon>
           <v-icon slot="append" color="primary">mdi-volume-high</v-icon>
         </v-slider>
       </v-col>
@@ -106,17 +119,21 @@
 </template>
 
 <script>
-import songsList from '../data/playlist';
-import { Howl } from 'howler';
+import playlist from '../data/playlist';
+import { Howl, Howler } from 'howler';
 
 export default {
   name: 'PlaySong',
   data() {
     return {
-      songsList,
-      currentSong: [],
       currentIndex: 0,
       currentPlayerTime: 0,
+      currentSong: [],
+      muted: false,
+      playlist,
+      oldVolumeValue: 0,
+      songVolume: 0.5,
+      songProgress: 0,
       togglePlayIcon: 'mdi-play',
     };
   },
@@ -140,7 +157,7 @@ export default {
       this.currentIndex -= 1;
 
       if (this.currentIndex < 0) {
-        this.currentIndex = this.songsList.length - 1;
+        this.currentIndex = this.playlist.length - 1;
       }
 
       this.getPreviousSongRoute();
@@ -148,7 +165,7 @@ export default {
     nextSong() {
       this.currentIndex += 1;
 
-      if (this.currentIndex >= this.songsList.length) {
+      if (this.currentIndex >= this.playlist.length) {
         this.currentIndex = 0;
       }
 
@@ -157,7 +174,7 @@ export default {
     getPreviousSongRoute() {
       this.stop();
 
-      this.currentSong = songsList[this.currentIndex];
+      this.currentSong = playlist[this.currentIndex];
 
       this.$router.push({
         name: 'play-song',
@@ -169,20 +186,26 @@ export default {
     getNextSongRoute() {
       this.getPreviousSongRoute();
     },
+    setVolume(songVolume) {
+      Howler.volume(songVolume);
+    },
+    toggleVolumeMuted() {
+      Howler.mute(!this.muted);
+
+      this.muted = !this.muted;
+    },
     howlerize() {
       return (this.currentSong.howl = new Howl({
         src: require(`../../playlist/${this.currentSong.file}`),
-        autoplay: true,
+        autoplay: false,
+        volume: this.songVolume,
       }));
     },
   },
   created() {
-    this.currentSong = songsList.find(
-      song => song.id === this.$route.params.id
-    );
+    this.currentSong = playlist.find(song => song.id === this.$route.params.id);
 
-    // TODO: refactor.
-    this.currentIndex = songsList.findIndex(
+    this.currentIndex = playlist.findIndex(
       song => song.id === this.$route.params.id
     );
 
@@ -191,6 +214,15 @@ export default {
     setInterval(() => {
       this.currentPlayerTime = this.currentSong.howl.seek();
     }, 200);
+  },
+  computed: {
+    getSongProgress() {
+      if (this.currentSong.howl.duration() === 0) {
+        return 0;
+      }
+
+      return (this.currentPlayerTime / this.currentSong.howl.duration()) * 100;
+    },
   },
 };
 </script>
